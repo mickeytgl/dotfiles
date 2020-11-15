@@ -1,0 +1,26 @@
+[user]
+  name = Miguel Torres
+  email = migueltg93@gmail.com
+[core]
+  excludesfile = ~/.gitignore
+[alias]
+  a = add
+  aa = add --all
+  s = status
+  cm = commit -m
+  ca = commit --amend --verbose
+  car = commit --amend --no-edit
+  co = checkout
+  copysha = !git rev-parse HEAD | pbcopy
+  dfw = !git df -w
+  dcw = !git dc -w
+  fall = fetch --all
+  pl = pull
+  ps = push
+  rbc = rebase --continue
+  rdup = !git dup && git rebase develop
+  rmup = !git mup && git rebase master
+  uncommit = reset --soft HEAD^
+  unstage = reset
+  upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
+  ureset = !git reset --hard $(git upstream)
