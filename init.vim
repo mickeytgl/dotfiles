@@ -36,9 +36,6 @@ if filereadable(expand("~/.vimrc.bundles"))
   source ~/.vimrc.bundles
 endif
 
-if has('nvim')
-endif
-
 " Load matchit.vim, but only if the user hasn't installed a newer version.
 if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
@@ -207,8 +204,8 @@ map <C-g> <Esc><Esc>:BCommits<cr>
 "" Leader Mappings
 ""
 
-nmap <leader>vi :tabedit ~/.vimrc<cr>
-nmap <leader>so :source ~/.vimrc<cr>
+nmap <leader>vi :tabedit ~/code/dotfiles/init.vim<cr>
+nmap <leader>so :source ~/code/dotfiles/init.vim<cr>
 nmap <leader>pi :PlugInstall<cr>
 nmap <leader>co ggVG*"y
 nmap <leader>f :Ack 
@@ -326,6 +323,7 @@ Plug 'sickill/vim-monokai'
 "
 set hidden
 
+let g:coc_global_extensions = ['coc-solargraph']
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     \ 'python': ['/usr/local/bin/pyls'],
@@ -342,6 +340,17 @@ nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 if filereadable(expand("~/.vimrc.bundles.local"))
   source ~/.vimrc.bundles.local
