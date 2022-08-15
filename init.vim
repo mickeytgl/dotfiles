@@ -1,9 +1,8 @@
-set encoding=utf-8
-
 " Leader
 let mapleader = " "
 
 set backspace=2   " Backspace deletes like most programs in insert mode
+set updatetime=250
 set nobackup
 set nowrap
 set nowritebackup
@@ -14,12 +13,14 @@ set showcmd       " display incomplete commands
 set incsearch     " do incremental searching
 set laststatus=2  " Always display the status line
 set autowrite     " Automatically :write before running commands
-set number relativenumber " Relative numbers
+set guifont=Hack:h12
 if has('nvim')
   set inccommand=nosplit
   set diffopt+=vertical
 endif
 let g:ctrlp_use_caching = 0
+
+" set number relativenumber " Relative numbers
 augroup vimrc-incsearch-highlight
   autocmd!
   autocmd CmdlineEnter /,\? :set hlsearch
@@ -93,8 +94,8 @@ if executable('ag')
 endif
 
 " Make it obvious where 80 characters is
-set textwidth=80
-set colorcolumn=+1
+" set textwidth=80
+" set colorcolumn=+1
 
 " Numbers
 set number
@@ -120,8 +121,10 @@ inoremap <S-Tab> <C-n>
 nnoremap <Leader><Leader> <C-^>
 
 " Go blame
-nnoremap gb :Gblame<CR>
+nnoremap gb :Git blame<CR>
 nnoremap ga :vsplit<CR>:A<CR>
+nnoremap <space>e :CocCommand explorer<CR>
+nnoremap <space>d :CocCommand explorer<CR>
 
 " Get off my lawn
 nnoremap <Left> :echoe "Use h"<CR>
@@ -136,10 +139,9 @@ nnoremap <silent> <Leader>l :TestLast<CR>
 nnoremap <silent> <Leader>a :TestSuite<CR>
 nnoremap <silent> <Leader>gt :TestVisit<CR>
 
-" Run commands that require an interactive shell
+
+"Run commands that require an interactive shell
 nnoremap <Leader>r :RunInInteractiveShell<Space>
-" Toggle NerdTree
-map <C-n> :NERDTreeToggle<CR>
 " Treat <li> and <p> tags like the block tags they are
 let g:html_indent_tags = 'li\|p'
 
@@ -171,6 +173,7 @@ set complete+=kspell
 " ===================
 " Mappings
 
+map <C-t> <esc>:tabnew<CR>
 nmap 0 ^
 imap jk <esc>
 imap kj <esc>
@@ -195,7 +198,8 @@ let g:NERDTrimTrailingWhitespace = 1
 "" FZF
 ""
 
-map <C-p> <Esc><Esc>:Files<cr>
+map <C-p> <Esc><Esc>:GFiles<cr>
+map <C-b> <Esc><Esc>:Buffers<cr> 
 inoremap <C-f> :BLines<cr>
 map <C-g> <Esc><Esc>:BCommits<cr>
 
@@ -205,13 +209,18 @@ map <C-g> <Esc><Esc>:BCommits<cr>
 ""
 
 nmap <leader>vi :tabedit ~/code/dotfiles/init.vim<cr>
+nmap <leader>ig :tabedit ~/code/dotfiles/.gitignore<cr>
+nmap <leader>gc :tabedit ~/code/dotfiles/.gitconfig<cr>
 nmap <leader>so :source ~/code/dotfiles/init.vim<cr>
 nmap <leader>pi :PlugInstall<cr>
 nmap <leader>co ggVG*"y
 nmap <leader>f :Ack 
-nmap <leader>b :Gblame<cr> 
 nmap <leader>vt :vs<cr>:terminal<cr>
 nmap tt :sp<cr><c-W>J:res<space>-10<cr>:terminal<cr>A
+nmap <leader>bb obinding.pry<esc><esc>==
+nmap <leader>BB Obinding.pry<esc><esc>==
+
+nmap tn :tabnew<cr>
 
 noremap <leader>fo za
 noremap <expr> <Leader>fa &foldlevel ? 'zM' : 'zR'
@@ -224,6 +233,12 @@ highlight Folded guibg=#000 guifg=#a3a34c
 "
 " Autosave
 :au FocusLost * :wa
+
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+:augroup END
 
 "Plugin
 filetype plugin on
@@ -268,6 +283,7 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 call plug#begin('~/.vim/bundle')
 
 " Define bundles via Github repos
+Plug 'RRethy/vim-illuminate'
 Plug 'machakann/vim-highlightedyank'
 Plug 'christoomey/vim-run-interactive'
 Plug 'rking/ag.vim'
@@ -293,20 +309,23 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-commentary'
 Plug 'mattn/emmet-vim'
 Plug 'pangloss/vim-javascript'
-Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'ap/vim-css-color'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'maxmellon/vim-jsx-pretty'
-Plug 'scrooloose/nerdtree'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mileszs/ack.vim'
 Plug 'jparise/vim-graphql'
+Plug 'airblade/vim-gitgutter'
+Plug 'mechatroner/rainbow_csv'
+Plug 'psliwka/vim-smoothie'
+Plug 'jgdavey/vim-blockle'
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -318,11 +337,15 @@ Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'sickill/vim-monokai'
+Plug 'ryanoasis/vim-devicons'
+Plug 'junegunn/limelight.vim'
+Plug 'junegunn/goyo.vim'
 
 " Required for operations modifying multiple buffers like rename.
 "
 set hidden
 
+let g:blockle_mapping = '<Leader>bl'
 let g:coc_global_extensions = ['coc-solargraph']
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
@@ -356,5 +379,51 @@ if filereadable(expand("~/.vimrc.bundles.local"))
   source ~/.vimrc.bundles.local
 endif
 
+function! CreateCenteredFloatingWindow()
+    let width = min([&columns - 4, max([80, &columns - 20])])
+    let height = min([&lines - 4, max([20, &lines - 10])])
+    let top = ((&lines - height) / 2) - 1
+    let left = (&columns - width) / 2
+    let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
+
+    let top = "╭" . repeat("─", width - 2) . "╮"
+    let mid = "│" . repeat(" ", width - 2) . "│"
+    let bot = "╰" . repeat("─", width - 2) . "╯"
+    let lines = [top] + repeat([mid], height - 2) + [bot]
+    let s:buf = nvim_create_buf(v:false, v:true)
+    call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
+    call nvim_open_win(s:buf, v:true, opts)
+    set winhl=Normal:Floating
+    let opts.row += 1
+    let opts.height -= 2
+    let opts.col += 2
+    let opts.width -= 4
+    call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+    au BufWipeout <buffer> exe 'bw '.s:buf
+endfunction
+
+let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#branch#displayed_head_limit = 80
+let g:airline_theme='bubblegum'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#default#section_truncate_width = {
+    \ 'b': 90,
+    \ 'x': 60,
+    \ 'y': 88,
+    \ 'z': 45,
+    \ 'warning': 80,
+    \ 'error': 80,
+    \ }
+let g:airline#extensions#default#layout = [
+    \ [ 'a', 'c', 'b' ],
+    \ [ 'x', 'y', 'z', 'error', 'warning' ]
+    \ ]
+let test#strategy = "neovim"
+
+hi link CocFloating markdown
 
 call plug#end()

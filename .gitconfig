@@ -1,26 +1,42 @@
 [user]
-  name = Miguel Torres
-  email = migueltg93@gmail.com
+	name = Miguel
+  email = "miguel.torres@hey.com"
 [core]
   excludesfile = ~/.gitignore
+  editor = nvim
 [alias]
   a = add
   aa = add --all
-  s = status
-  cm = commit -m
   ca = commit --amend --verbose
   car = commit --amend --no-edit
+  clean = git branch | grep -v "main" | xargs git branch -D
+  cm = commit -m
   co = checkout
+  com = checkout main
   copysha = !git rev-parse HEAD | pbcopy
-  dfw = !git df -w
   dcw = !git dc -w
+  dfw = !git df -w
+  dig = "!f() { git log --pretty=format:'%Cred%h%Creset - %Cgreen(%ad)%Creset - %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -G"$1" -- $2; }; f"
   fall = fetch --all
   pl = pull
+  pm = pull origin main
   ps = push
   rbc = rebase --continue
   rdup = !git dup && git rebase develop
+  recent="branch --sort=-committerdate"
   rmup = !git mup && git rebase master
+  s = status
   uncommit = reset --soft HEAD^
   unstage = reset
   upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
   ureset = !git reset --hard $(git upstream)
+  wip = add . | git cm wip
+[pull]
+	ff = only
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[push]
+	autoSetupRemote = true
