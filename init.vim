@@ -212,6 +212,7 @@ nmap <leader>vi :tabedit ~/code/dotfiles/init.vim<cr>
 nmap <leader>ig :tabedit ~/code/dotfiles/.gitignore<cr>
 nmap <leader>gc :tabedit ~/code/dotfiles/.gitconfig<cr>
 nmap <leader>so :source ~/code/dotfiles/init.vim<cr>
+nmap <leader>zs :source ~/code/dotfiles/zsh/.zshrc<cr>
 nmap <leader>pi :PlugInstall<cr>
 nmap <leader>co ggVG*"y
 nmap <leader>f :Ack 
